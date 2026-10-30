@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - name: ruff（初期仅报告）
+        run: ruff check .
+        continue-on-error: true
+      - run: python -m compileall -q .
+      # 有测试后替换为：pip install -e .[test] && pytest
